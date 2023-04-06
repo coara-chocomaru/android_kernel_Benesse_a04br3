@@ -13,8 +13,8 @@ jobs:
     
     - name: Set Up Toolchain
       run: |
-        sudo apt-get install -y gcc-8-aarch64-linux-gnu
-        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8 100
+        sudo apt-get install -y gcc-7-aarch64-linux-gnu
+        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-7 100
       
     
     - name: Install Dependencies
