@@ -5,14 +5,14 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build Kernel
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
     
     - name: Set Up Toolchain
-      run: sudo apt-get install -y gcc-9-aarch64-linux-gnu
+      run: sudo apt-get install -y gcc-8-aarch64-linux-gnu
     
     - name: Install Dependencies
       run: sudo apt-get install -y bc libssl-dev
