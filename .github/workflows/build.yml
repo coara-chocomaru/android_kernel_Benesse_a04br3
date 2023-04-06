@@ -29,8 +29,8 @@ jobs:
     
     - name: Build Kernel
       run: |
-        export CFLAGS="-Wno-error"
-        export CXXFLAGS="-Wno-error"
+        export CFLAGS="-w"
+        export CXXFLAGS="-w"
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_defconfig
         make -d ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs
