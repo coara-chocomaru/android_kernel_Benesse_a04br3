@@ -30,6 +30,7 @@ jobs:
     - name: Build Kernel
       run: |
         $(cd ./drivers/misc/mediatek/cmdq/v2 && wget https://github.com/ibilux/android_device_tree_hermes/raw/crdroid-9.0/kernel-headers/cmdq_engine.h)
+        $(ln -s ./drivers/misc/mediatek/ext_disp/mt8167/extd_platform.h ./drivers/misc/mediatek/ext_disp/extd_platform.h)
         export CFLAGS="-w"
         export CXXFLAGS="-w"
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_debug_defconfig
