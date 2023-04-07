@@ -20,7 +20,7 @@ jobs:
 
         # update the repository information
         sudo apt update
-        sudo apt-get install -y gcc-4.8-aarch64-linux-gnu
+        sudo apt-get install -y gcc-4.8-aarch64-linux-gnu u-boot-tools
         sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-4.8 100
       
     
@@ -42,7 +42,6 @@ jobs:
         export CXXFLAGS="-w"
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_debug_defconfig
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
-        make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- zImage -j$(nproc)
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs -j$(nproc)
 
     
