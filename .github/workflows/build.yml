@@ -14,14 +14,14 @@ jobs:
     - name: Set Up Toolchain
       run: |
         # add the Ubuntu 18.04 repository to the end of the sources.list file
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu bionic main restricted universe multiverse" >> /etc/apt/sources.list'
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list'
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list'
+        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" >> /etc/apt/sources.list'
+        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted universe multiverse" >> /etc/apt/sources.list'
+        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse" >> /etc/apt/sources.list'
 
         # update the repository information
         sudo apt update
-        sudo apt-get install -y gcc-6-aarch64-linux-gnu
-        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-6 100
+        sudo apt-get install -y gcc-4-aarch64-linux-gnu
+        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-4 100
       
     
     - name: Install Dependencies
