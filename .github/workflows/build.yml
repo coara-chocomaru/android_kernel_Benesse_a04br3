@@ -35,6 +35,7 @@ jobs:
         $(cp ./drivers/misc/mediatek/thermal/mt8167/inc/*.h ./drivers/misc/mediatek/thermal/mt8167/)
         $(cp -n ./drivers/misc/mediatek/uart/mt8167/* ./drivers/misc/mediatek/uart/include/)
         $(cp -n ./drivers/misc/mediatek/usb11/*.h ./drivers/misc/mediatek/usb11/mt8167/)
+        $(cd ./drivers/misc/mediatek/video/mt8167/videox/ && wget https://github.com/deadman96385/android_kernel_zte_mt6761/blob/master/drivers/misc/mediatek/video/mt6765/dispsys/ddp_hal.h)
         
         export CFLAGS="-w"
         export CXXFLAGS="-w"
