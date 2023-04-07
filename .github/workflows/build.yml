@@ -20,8 +20,8 @@ jobs:
 
         # update the repository information
         sudo apt update
-        sudo apt-get install -y gcc-5-aarch64-linux-gnu
-        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-5 100
+        sudo apt-get install -y gcc-6-aarch64-linux-gnu
+        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-6 100
       
     
     - name: Install Dependencies
