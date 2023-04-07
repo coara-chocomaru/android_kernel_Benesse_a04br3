@@ -32,7 +32,7 @@ jobs:
         $(cd ./drivers/misc/mediatek/cmdq/v2 && wget https://github.com/ibilux/android_device_tree_hermes/raw/crdroid-9.0/kernel-headers/cmdq_engine.h)
         $(cp ./drivers/misc/mediatek/ext_disp/mt8167/extd_platform.h ./drivers/misc/mediatek/ext_disp/ )
         $(cp ./drivers/misc/mediatek/ext_disp/mt8167/external_display.h ./drivers/misc/mediatek/ext_disp/v1/)
-        $(cp ./drivers/misc/mediatek/leds/mtk_leds_drv.h ./drivers/misc/mediatek/leds/)
+        
         export CFLAGS="-w"
         export CXXFLAGS="-w"
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_debug_defconfig
