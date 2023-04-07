@@ -19,11 +19,11 @@
 #define CMDQ_DRIVER_DEVICE_NAME         "mtk_cmdq"
 
 /* #define CMDQ_COMMON_ENG_SUPPORT */
-/*#ifdef CMDQ_COMMON_ENG_SUPPORT*/
+#ifdef CMDQ_COMMON_ENG_SUPPORT
 #include "cmdq_engine_common.h"
-/*#else
+#else
 #include "cmdq_engine.h"
-#endif*/
+#endif
 
 #define CMDQ_SPECIAL_SUBSYS_ADDR (99)
 
