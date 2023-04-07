@@ -42,7 +42,8 @@ jobs:
         export CXXFLAGS="-w"
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_debug_defconfig
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
-        make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs
+        make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs -j$(nproc)
+        make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- modules -j$(nproc)
     
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
@@ -50,4 +51,6 @@ jobs:
         name: kernel
         path: |
           arch/arm64/boot/Image
-          arch/arm64/boot/dts/mediatek/mt8167-a04-br3.dtb
+          arch/arm64/boot/dts/mediatek/a04br3.dtb
+          arch/arm64/boot/Image.gz
+          arch/arm64/boot/Image.gz-dtb
