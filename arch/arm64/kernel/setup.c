@@ -86,7 +86,7 @@ static struct resource mem_res[] = {
 
 #define kernel_code mem_res[0]
 #define kernel_data mem_res[1]
-
+#define COPY_CHUNK_SIZE (16 * 1024)
 /*
  * The recorded values of x0 .. x3 upon kernel entry.
  */
@@ -268,14 +268,27 @@ static void __init relocate_initrd(void)
 		new_start, new_start + size - 1);
 
 	dest = (void *)initrd_start;
-
+	
 	if (to_free) {
-		memcpy(dest, (void *)__phys_to_virt(orig_start), to_free);
-		dest += to_free;
-	}
-
-	copy_from_early_mem(dest, orig_start + to_free, size - to_free);
-
+           unsigned long off = 0;
+           while (off < to_free) {
+           unsigned long chunk = min(COPY_CHUNK_SIZE, to_free - off);
+           memcpy(dest + off, (void *)__phys_to_virt(orig_start + off), chunk);
+           off += chunk;
+           cond_resched();
+          }
+          dest += to_free;
+          }
+    {
+        unsigned long remain = size - to_free;
+        unsigned long off = 0;
+        while (off < remain) {
+        unsigned long chunk = min(COPY_CHUNK_SIZE, remain - off);
+        copy_from_early_mem(dest + off, orig_start + to_free + off, chunk);
+        off += chunk;
+        cond_resched();
+    }
+}
 	if (to_free) {
 		pr_info("Freeing original RAMDISK from [%llx-%llx]\n",
 			orig_start, orig_start + to_free - 1);
