@@ -86,7 +86,7 @@ static struct resource mem_res[] = {
 
 #define kernel_code mem_res[0]
 #define kernel_data mem_res[1]
-#define COPY_CHUNK_SIZE (16 * 1024)
+#define COPY_CHUNK_SIZE (64 * 1024)
 /*
  * The recorded values of x0 .. x3 upon kernel entry.
  */
@@ -226,26 +226,20 @@ static void __init request_standard_resources(void)
 }
 
 #ifdef CONFIG_BLK_DEV_INITRD
-/*
- * Relocate initrd if it is not completely within the linear mapping.
- * This would be the case if mem= cuts out all or part of it.
- */
 static void __init relocate_initrd(void)
 {
 	phys_addr_t orig_start = __virt_to_phys(initrd_start);
-	phys_addr_t orig_end = __virt_to_phys(initrd_end);
-	phys_addr_t ram_end = memblock_end_of_DRAM();
+	phys_addr_t orig_end   = __virt_to_phys(initrd_end);
+	phys_addr_t ram_end    = memblock_end_of_DRAM();
 	phys_addr_t new_start;
 	unsigned long size, to_free = 0;
 	void *dest;
 
+	
 	if (orig_end <= ram_end)
 		return;
 
-	/*
-	 * Any of the original initrd which overlaps the linear map should
-	 * be freed after relocating.
-	 */
+
 	if (orig_start < ram_end)
 		to_free = ram_end - orig_start;
 
@@ -253,11 +247,10 @@ static void __init relocate_initrd(void)
 	if (!size)
 		return;
 
-	/* initrd needs to be relocated completely inside linear mapping */
-	new_start = memblock_find_in_range(0, PFN_PHYS(max_pfn),
-					   size, PAGE_SIZE);
+	
+	new_start = memblock_alloc_range(size, PAGE_SIZE, 0, PFN_PHYS(max_pfn));
 	if (!new_start)
-		panic("Cannot relocate initrd of size %ld\n", size);
+		panic("Cannot relocate initrd of size %lu\n", size);
 	memblock_reserve(new_start, size);
 
 	initrd_start = __phys_to_virt(new_start);
@@ -269,26 +262,31 @@ static void __init relocate_initrd(void)
 
 	dest = (void *)initrd_start;
 	
+	
 	if (to_free) {
-           unsigned long off = 0;
-           while (off < to_free) {
-           unsigned long chunk = min(COPY_CHUNK_SIZE, to_free - off);
-           memcpy(dest + off, (void *)__phys_to_virt(orig_start + off), chunk);
-           off += chunk;
-           cond_resched();
-          }
-          dest += to_free;
-          }
-    {
-        unsigned long remain = size - to_free;
-        unsigned long off = 0;
-        while (off < remain) {
-        unsigned long chunk = min(COPY_CHUNK_SIZE, remain - off);
-        copy_from_early_mem(dest + off, orig_start + to_free + off, chunk);
-        off += chunk;
-        cond_resched();
-    }
-}
+		unsigned long off = 0;
+		while (off < to_free) {
+			unsigned long chunk = min(COPY_CHUNK_SIZE, to_free - off);
+			memcpy(dest + off, (void *)__phys_to_virt(orig_start + off), chunk);
+			off += chunk;
+			cond_resched();
+		}
+		dest += to_free;
+	}
+
+
+	{
+		unsigned long remain = size - to_free;
+		unsigned long off = 0;
+		while (off < remain) {
+			unsigned long chunk = min(COPY_CHUNK_SIZE, remain - off);
+			copy_from_early_mem(dest + off, orig_start + to_free + off, chunk);
+			off += chunk;
+			cond_resched();
+		}
+	}
+
+	/* リニアマッピング内の重なっていた部分を解放 */
 	if (to_free) {
 		pr_info("Freeing original RAMDISK from [%llx-%llx]\n",
 			orig_start, orig_start + to_free - 1);
