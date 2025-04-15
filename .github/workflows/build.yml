@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build Kernel
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout Code
@@ -21,8 +21,8 @@ jobs:
             libssl-dev \
             u-boot-tools \
             wget \
-            bzip2 \
-            tar
+            tar \
+            bzip2
 
       - name: Setup GCC 4.8 Toolchain
         run: |
