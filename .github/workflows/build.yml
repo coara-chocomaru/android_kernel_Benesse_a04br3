@@ -39,9 +39,9 @@ jobs:
           
           export CFLAGS="-w"
           export CXXFLAGS="-w"
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_defconfig
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs -j$(nproc)
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- EXTRA_CFLAGS="-fcommon" a04br3_defconfig
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- EXTRA_CFLAGS="-fcommon" -j$(nproc)
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- EXTRA_CFLAGS="-fcommon" Image dtbs -j$(nproc)
       
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
