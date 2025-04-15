@@ -156,10 +156,8 @@ static void __init smp_build_mpidr_hash(void)
 	 */
 	mpidr_hash.shift_aff[0] = MPIDR_LEVEL_SHIFT(0) + fs[0];
 	mpidr_hash.shift_aff[1] = MPIDR_LEVEL_SHIFT(1) + fs[1] - bits[0];
-	mpidr_hash.shift_aff[2] = MPIDR_LEVEL_SHIFT(2) + fs[2] -
-						(bits[1] + bits[0]);
-	mpidr_hash.shift_aff[3] = MPIDR_LEVEL_SHIFT(3) +
-				  fs[3] - (bits[2] + bits[1] + bits[0]);
+	mpidr_hash.shift_aff[2] = MPIDR_LEVEL_SHIFT(2) + fs[2] - (bits[1] + bits[0]);
+	mpidr_hash.shift_aff[3] = MPIDR_LEVEL_SHIFT(3) + fs[3] - (bits[2] + bits[1] + bits[0]);
 	mpidr_hash.mask = mask;
 	mpidr_hash.bits = bits[3] + bits[2] + bits[1] + bits[0];
 	pr_debug("MPIDR hash: aff0[%u] aff1[%u] aff2[%u] aff3[%u] mask[%#llx] bits[%u]\n",
@@ -239,7 +237,7 @@ static void __init relocate_initrd(void)
 	if (orig_end <= ram_end)
 		return;
 
-
+	
 	if (orig_start < ram_end)
 		to_free = ram_end - orig_start;
 
@@ -247,8 +245,7 @@ static void __init relocate_initrd(void)
 	if (!size)
 		return;
 
-	
-	new_start = memblock_alloc_range(size, PAGE_SIZE, 0, PFN_PHYS(max_pfn));
+	new_start = memblock_alloc_range(size, PAGE_SIZE, 0, PFN_PHYS(max_pfn), 0);
 	if (!new_start)
 		panic("Cannot relocate initrd of size %lu\n", size);
 	memblock_reserve(new_start, size);
@@ -261,12 +258,12 @@ static void __init relocate_initrd(void)
 		new_start, new_start + size - 1);
 
 	dest = (void *)initrd_start;
-	
-	
+
+
 	if (to_free) {
 		unsigned long off = 0;
 		while (off < to_free) {
-			unsigned long chunk = min(COPY_CHUNK_SIZE, to_free - off);
+			unsigned long chunk = min_t(unsigned long, COPY_CHUNK_SIZE, to_free - off);
 			memcpy(dest + off, (void *)__phys_to_virt(orig_start + off), chunk);
 			off += chunk;
 			cond_resched();
@@ -274,19 +271,18 @@ static void __init relocate_initrd(void)
 		dest += to_free;
 	}
 
-
 	{
 		unsigned long remain = size - to_free;
 		unsigned long off = 0;
 		while (off < remain) {
-			unsigned long chunk = min(COPY_CHUNK_SIZE, remain - off);
+			unsigned long chunk = min_t(unsigned long, COPY_CHUNK_SIZE, remain - off);
 			copy_from_early_mem(dest + off, orig_start + to_free + off, chunk);
 			off += chunk;
 			cond_resched();
 		}
 	}
 
-	/* リニアマッピング内の重なっていた部分を解放 */
+	
 	if (to_free) {
 		pr_info("Freeing original RAMDISK from [%llx-%llx]\n",
 			orig_start, orig_start + to_free - 1);
