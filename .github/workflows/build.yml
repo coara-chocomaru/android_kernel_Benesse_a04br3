@@ -13,17 +13,9 @@ jobs:
     
     - name: Set Up Toolchain
       run: |
-        # add the Ubuntu 18.04 repository to the end of the sources.list file
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse" >> /etc/apt/sources.list'
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse" >> /etc/apt/sources.list'
-        sudo sh -c 'echo "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" >> /etc/apt/sources.list'
-
-        # update the repository information
         sudo apt update
-        sudo apt-get install -y gcc-4.8-aarch64-linux-gnu u-boot-tools
-        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-4.8 100
+        sudo apt-get install -y gcc-aarch64-linux-gnu u-boot-tools
       
-    
     - name: Install Dependencies
       run: sudo apt-get install -y bc libssl-dev
     
@@ -43,7 +35,6 @@ jobs:
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- a04br3_defconfig
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
         make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image dtbs -j$(nproc)
-
     
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
