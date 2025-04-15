@@ -21,13 +21,14 @@ jobs:
             libssl-dev \
             u-boot-tools \
             wget \
+            bzip2 \
             tar
 
       - name: Setup GCC 4.8 Toolchain
         run: |
-          wget -q https://releases.linaro.org/components/toolchain/binaries/4.8-2014.04/aarch64-linux-gnu/gcc-linaro-4.8-2014.04-x86_64_aarch64-linux-gnu.tar.xz
-          tar xf gcc-linaro-4.8-2014.04-x86_64_aarch64-linux-gnu.tar.xz
-          echo "PATH=$(pwd)/gcc-linaro-4.8-2014.04-x86_64_aarch64-linux-gnu/bin:\$PATH" >> $GITHUB_ENV
+          wget -q https://releases.linaro.org/archive/14.04/components/toolchain/binaries/gcc-linaro-aarch64-linux-gnu-4.8-2014.04_linux.tar.bz2
+          tar xjf gcc-linaro-aarch64-linux-gnu-4.8-2014.04_linux.tar.bz2
+          echo "PATH=$(pwd)/gcc-linaro-aarch64-linux-gnu-4.8-2014.04_linux/bin:\$PATH" >> $GITHUB_ENV
 
       - name: Fetch Missing Header
         run: |
